@@ -40,7 +40,7 @@ RSS_FEEDS = [
     "https://huggingface.co/blog/feed.xml",
     "https://deepmind.google/blog/rss.xml",
     "https://blog.research.google/feeds/posts/default",
-    "https://news.mit.edu/topic/artificial-intelligence-rss.xml",
+    "https://news.mit.edu/rss/topic/artificial-intelligence",
     # Research curation
     "https://paperswithcode.com/rss",
     # Newsletters
