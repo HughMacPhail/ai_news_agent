@@ -37,6 +37,8 @@ def fetch_rss_news() -> list[dict]:
                     "published": pub_date.isoformat() if pub_date else None,
                 })
                 count += 1
+        except requests.Timeout:
+            print(f"[RSS] Timeout fetching {feed_url}, skipping.")
         except Exception as e:
             print(f"[RSS] Error fetching {feed_url}: {e}")
 
