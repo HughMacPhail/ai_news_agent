@@ -1,6 +1,9 @@
 import feedparser
+import requests
 from datetime import datetime, timedelta
 from config import RSS_FEEDS, MAX_ARTICLES_PER_SOURCE, LOOKBACK_HOURS
+
+RSS_TIMEOUT = 10  # seconds per feed
 
 
 def fetch_rss_news() -> list[dict]:
@@ -10,7 +13,9 @@ def fetch_rss_news() -> list[dict]:
 
     for feed_url in RSS_FEEDS:
         try:
-            feed = feedparser.parse(feed_url)
+            resp = requests.get(feed_url, timeout=RSS_TIMEOUT, headers={"User-Agent": "ai_news_agent/1.0"})
+            resp.raise_for_status()
+            feed = feedparser.parse(resp.content)
             count = 0
             for entry in feed.entries:
                 if count >= MAX_ARTICLES_PER_SOURCE:
