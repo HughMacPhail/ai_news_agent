@@ -17,7 +17,7 @@ git clone https://github.com/john-merrick/ai_news_agent.git
 cd ai_news_agent
 python3 -m venv venv
 source venv/bin/activate
-pip install langchain-anthropic langchain-core exa-py feedparser praw python-telegram-bot requests python-dotenv apscheduler
+pip install langchain-anthropic langchain-openai langchain-core langfuse exa-py feedparser praw python-telegram-bot requests python-dotenv apscheduler
 ```
 
 ### 2. Configure environment variables
@@ -30,10 +30,14 @@ cp .env.example .env
 
 | Variable | Required | Description |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Yes | [console.anthropic.com](https://console.anthropic.com) |
+| `LITELLM_API_KEY` | Recommended | Virtual key from LiteLLM proxy (see `dev-ops/observability/`) |
+| `LITELLM_BASE_URL` | No | Defaults to `http://localhost:4000/v1` |
+| `ANTHROPIC_API_KEY` | Fallback | Used only if `LITELLM_API_KEY` is not set |
 | `TELEGRAM_BOT_TOKEN` | Yes | Create a bot via [@BotFather](https://t.me/BotFather) |
 | `TELEGRAM_CHAT_ID` | Yes | Your chat/channel ID |
 | `EXA_API_KEY` | Yes | [exa.ai](https://exa.ai) |
+| `LANGFUSE_PUBLIC_KEY` | No | Enables tracing in Langfuse |
+| `LANGFUSE_SECRET_KEY` | No | Enables tracing in Langfuse |
 | `REDDIT_CLIENT_ID` | No | [reddit.com/prefs/apps](https://www.reddit.com/prefs/apps) |
 | `REDDIT_CLIENT_SECRET` | No | Same as above |
 | `TWITTER_BEARER_TOKEN` | No | [developer.twitter.com](https://developer.twitter.com) |
