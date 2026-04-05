@@ -34,9 +34,9 @@ def _create_llm():
             base_url=LITELLM_BASE_URL,
             api_key=LITELLM_API_KEY,
             max_tokens=1500,
-            model_kwargs={
+            extra_body={
                 "metadata": {
-                    "product_area": "apps",
+                    "product_area": "ai_news_agent",
                     "workflow": "ai_news_agent",
                 },
             },
@@ -52,19 +52,15 @@ def _create_llm():
 
 
 def _get_langfuse_handler():
-    """Create Langfuse callback handler if configured."""
+    """Create Langfuse v4 callback handler if configured."""
     if not (LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY):
         return None
     try:
-        from langfuse.callback import CallbackHandler
+        from langfuse.langchain import CallbackHandler
 
-        return CallbackHandler(
-            public_key=LANGFUSE_PUBLIC_KEY,
-            secret_key=LANGFUSE_SECRET_KEY,
-            host=LANGFUSE_HOST,
-            tags=["apps", "ai_news_agent"],
-        )
-    except Exception:
+        return CallbackHandler()
+    except Exception as e:
+        print(f"[Langfuse] Failed to create handler: {e}")
         return None
 
 
@@ -86,10 +82,20 @@ def summarize_news(articles: list[dict]) -> str:
         ),
     ]
 
-    kwargs = {}
     langfuse_handler = _get_langfuse_handler()
-    if langfuse_handler:
-        kwargs["config"] = {"callbacks": [langfuse_handler]}
 
-    response = llm.invoke(messages, **kwargs)
+    if langfuse_handler:
+        from langfuse import propagate_attributes
+
+        with propagate_attributes(
+            user_id="ai_news_agent",
+            tags=["ai_news_agent"],
+            session_id=f"daily-digest-{datetime.now().strftime('%Y-%m-%d')}",
+            trace_name="summarize_news",
+            metadata={"article_count": str(len(articles))},
+        ):
+            response = llm.invoke(messages, config={"callbacks": [langfuse_handler]})
+    else:
+        response = llm.invoke(messages)
+
     return response.content

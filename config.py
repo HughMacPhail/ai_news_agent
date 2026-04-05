@@ -10,7 +10,7 @@ LITELLM_BASE_URL = os.getenv("LITELLM_BASE_URL", "http://localhost:4000/v1")
 # Langfuse Tracing (optional)
 LANGFUSE_PUBLIC_KEY = os.getenv("LANGFUSE_PUBLIC_KEY")
 LANGFUSE_SECRET_KEY = os.getenv("LANGFUSE_SECRET_KEY")
-LANGFUSE_HOST = os.getenv("LANGFUSE_HOST", "http://localhost:3000")
+LANGFUSE_HOST = os.getenv("LANGFUSE_HOST", "http://localhost:3100")
 
 # Anthropic (fallback — used if LITELLM_API_KEY is not set)
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
