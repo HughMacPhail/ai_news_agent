@@ -60,6 +60,14 @@ def run_agent():
     else:
         print("✗ Failed to send Telegram message.")
 
+    # Flush Langfuse traces before exit (important for script/serverless mode)
+    try:
+        from langfuse import Langfuse
+
+        Langfuse().flush()
+    except Exception:
+        pass
+
 
 def schedule_daily():
     """Run the agent on a daily schedule, with an immediate first run."""
