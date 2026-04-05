@@ -149,6 +149,22 @@ def _create_judge():
     )
 
 
+def _get_judge_langfuse_handler():
+    """Create Langfuse callback handler for judge LLM calls."""
+    if not (LANGFUSE_PUBLIC_KEY and LANGFUSE_SECRET_KEY):
+        return None
+    try:
+        from langfuse.langchain import CallbackHandler
+
+        return CallbackHandler(
+            tags=["eval", "judge"],
+            session_id="eval-run",
+            user_id="ai_news_agent",
+        )
+    except Exception:
+        return None
+
+
 def _judge_criterion(judge, input_text: str, output_text: str, name: str, description: str) -> dict:
     """Score an output on a single criterion using LLM-as-judge."""
     messages = [
@@ -160,7 +176,9 @@ def _judge_criterion(judge, input_text: str, output_text: str, name: str, descri
             output_text=output_text[:3000],
         )),
     ]
-    response = judge.invoke(messages)
+    handler = _get_judge_langfuse_handler()
+    config = {"callbacks": [handler]} if handler else {}
+    response = judge.invoke(messages, config=config)
     try:
         result = json.loads(response.content)
         score = max(0.0, min(1.0, float(result["score"])))
