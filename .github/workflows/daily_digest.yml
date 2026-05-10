@@ -1,0 +1,38 @@
+name: Daily AI News Digest
+
+on:
+  # 5 AM Sydney AEST (UTC+10) / 6 AM AEDT (UTC+11) during daylight saving.
+  # GitHub Actions cron runs in UTC: 19:00 UTC = 05:00 AEST / 06:00 AEDT.
+  schedule:
+    - cron: '0 19 * * *'
+
+  # Manual trigger for ad-hoc runs from the Actions tab.
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Run agent
+        env:
+          MS_TENANT_ID: ${{ secrets.MS_TENANT_ID }}
+          MS_CLIENT_ID: ${{ secrets.MS_CLIENT_ID }}
+          MS_CLIENT_SECRET: ${{ secrets.MS_CLIENT_SECRET }}
+          MS_SENDER_EMAIL: ${{ secrets.MS_SENDER_EMAIL }}
+          DIGEST_RECIPIENT: ${{ secrets.DIGEST_RECIPIENT }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          EXA_API_KEY: ${{ secrets.EXA_API_KEY }}
+        run: python main.py
