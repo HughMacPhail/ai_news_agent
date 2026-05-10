@@ -7,11 +7,11 @@ from fetchers.web_fetcher import fetch_web_news
 from fetchers.twitter_fetcher import fetch_twitter_news
 from fetchers.arxiv_fetcher import fetch_arxiv_papers
 from agent.summarizer import summarize_news
-from delivery.telegram import send_telegram_message
+from delivery.email import send_email_digest
 
 
 def run_agent():
-    """Fetch news from all sources, summarize with Claude, and send via Telegram."""
+    """Fetch news from all sources, summarise with Claude, and send via email."""
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Starting AI news agent...")
 
     all_articles = []
@@ -47,18 +47,17 @@ def run_agent():
         print("No articles collected. Check your API keys and internet connection.")
         return
 
-    print("Summarizing with Claude...")
+    print("Summarising with Claude...")
     digest = summarize_news(all_articles)
 
     print("\n--- DIGEST PREVIEW ---")
     print(digest[:600] + "\n[...]" if len(digest) > 600 else digest)
     print("--- END PREVIEW ---\n")
 
-    print("Sending to Telegram...")
-    if send_telegram_message(digest):
-        print("✓ Message sent successfully!")
-    else:
-        print("✗ Failed to send Telegram message.")
+    subject = f"AI Daily Digest — {datetime.now().strftime('%B %d, %Y')}"
+    print("Sending digest via email...")
+    send_email_digest(subject, digest)
+    print("✓ Email sent.")
 
     # Flush Langfuse traces before exit (important for script/serverless mode)
     try:

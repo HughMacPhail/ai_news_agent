@@ -65,7 +65,7 @@ def _get_langfuse_handler():
 
 
 def summarize_news(articles: list[dict]) -> str:
-    """Use Claude to summarize and curate articles into a Telegram-ready digest."""
+    """Use Claude to summarise and curate articles into an email-ready digest."""
     if not articles:
         return "No AI news articles were collected today."
 

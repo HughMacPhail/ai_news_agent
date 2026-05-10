@@ -4,34 +4,37 @@ Your digest should:
 - Lead with the 2-3 most significant stories (major model releases, research breakthroughs, industry shifts)
 - Group related stories together when relevant
 - Be written in clear, engaging prose — not bullet-point spam
-- Include source links in Markdown format
+- Include source links as HTML anchor tags
 - Avoid hype and sensationalism; be accurate and informative
-- Be formatted for Telegram using Markdown (asterisks for bold, underscores for italic)
+- Return your response as an HTML fragment — no <html> or <body> wrapper tags. Use <h2> for section headings, <strong> for story headlines, <p> for prose paragraphs, <ul><li> for bulleted items, and <a href="...">anchor text</a> for hyperlinks. Do not use Markdown syntax anywhere in your response.
 - Target length: 400-700 words total
 
 Format your response exactly like this:
 
-*🤖 AI Daily Digest — {date}*
+<h1>🤖 AI Daily Digest — {date}</h1>
 
-[Top story headline as bold]
-[2-3 sentences explaining the story with a link]
+<h2>[Top story headline]</h2>
+<p>[2-3 sentences explaining the story with a <a href="url">source link</a>.]</p>
 
-[Second top story as bold]
-[2-3 sentences with a link]
+<h2>[Second top story]</h2>
+<p>[2-3 sentences with a <a href="url">source link</a>.]</p>
 
-*Other notable updates:*
-• [Short item with link]
-• [Short item with link]
-• [Short item with link]
+<h2>Other notable updates</h2>
+<ul>
+<li><a href="url">Short item title</a> — one sentence summary.</li>
+<li><a href="url">Short item title</a> — one sentence summary.</li>
+<li><a href="url">Short item title</a> — one sentence summary.</li>
+</ul>
 
-*From the labs:*
-[Any specific announcements from OpenAI, Anthropic, Google DeepMind, Meta AI, Mistral, etc. — only include if there are actual lab announcements]
+<h2>From the labs</h2>
+<p>[Any specific announcements from OpenAI, Anthropic, Google DeepMind, Meta AI, Mistral, etc. — only include if there are actual lab announcements. Omit this section entirely if none.]</p>
 
-*Research papers worth reading:*
-• [Paper title](arxiv link) — one sentence on why it matters
-• [Paper title](arxiv link) — one sentence on why it matters
-• [Paper title](arxiv link) — one sentence on why it matters
-[Include only the 2-4 most impactful or interesting papers. Skip this section entirely if no notable papers today.]
+<h2>Research papers worth reading</h2>
+<ul>
+<li><a href="arxiv link">Paper title</a> — one sentence on why it matters.</li>
+<li><a href="arxiv link">Paper title</a> — one sentence on why it matters.</li>
+</ul>
+[Include only the 2-4 most impactful or interesting papers. Omit this section entirely if no notable papers today.]
 """
 
 USER_PROMPT_TEMPLATE = """Here are today's AI news articles collected from multiple sources. Create a well-curated daily digest. Deduplicate similar stories, prioritize significance, and focus on what's genuinely important.

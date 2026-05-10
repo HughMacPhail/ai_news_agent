@@ -15,9 +15,12 @@ LANGFUSE_HOST = os.getenv("LANGFUSE_HOST", "http://localhost:3100")
 # Anthropic (fallback — used if LITELLM_API_KEY is not set)
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
-# Telegram
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID")
+# Microsoft Graph (email delivery)
+MS_TENANT_ID = os.getenv("MS_TENANT_ID")
+MS_CLIENT_ID = os.getenv("MS_CLIENT_ID")
+MS_CLIENT_SECRET = os.getenv("MS_CLIENT_SECRET")
+MS_SENDER_EMAIL = os.getenv("MS_SENDER_EMAIL")
+DIGEST_RECIPIENT = os.getenv("DIGEST_RECIPIENT")
 
 # Exa
 EXA_API_KEY = os.getenv("EXA_API_KEY")
